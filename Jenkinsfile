@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                docker{
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
@@ -14,7 +14,11 @@ pipeline {
                     ls -la
                     node --version
                     npm --version
-                    npm ci
+                    if [ -f package-lock.json ]; then
+                        npm ci
+                    else
+                        npm install
+                    fi
                     npm run build
                     ls -la
                 '''
