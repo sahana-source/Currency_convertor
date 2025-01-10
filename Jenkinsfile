@@ -14,11 +14,6 @@ pipeline {
                     ls -la
                     node --version
                     npm --version
-                    if [ -f package-lock.json ]; then
-                        npm ci
-                    else
-                        npm install
-                    fi
                     npm run build
                     ls -la
                 '''
