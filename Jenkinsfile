@@ -29,7 +29,8 @@ pipeline {
 
             steps {
                 sh '''
-                    test -f build/index.html
+                    echo "Running tests..."
+                    npm install
                     npm test
                 '''
             }
@@ -39,6 +40,12 @@ pipeline {
     post {
         always{
             junit 'test-result/junit.xml'
+        }
+        failure {
+            echo 'Tests failed! Check the logs and fix the issues.'
+        }
+        success {
+            echo 'Build and tests succeeded!'
         }
     }
     
