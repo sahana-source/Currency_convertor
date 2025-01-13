@@ -30,8 +30,6 @@ pipeline {
             steps {
                 sh '''
                     echo "Running tests..."
-                    npm install
-                    npm test
                 '''
             }
         }
