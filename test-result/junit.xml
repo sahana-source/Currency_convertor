@@ -1,0 +1,8 @@
+<testsuite name="CalculatorTest" tests="4" failures="1" errors="0" skipped="0" time="0.123">
+    <testcase classname="CalculatorTest" name="testAdd" time="0.001" />
+    <testcase classname="CalculatorTest" name="testSubtract" time="0.002">
+        <failure type="java.lang.AssertionError">expected:&lt;1&gt; but was:&lt;2&gt;</failure>
+    </testcase>
+    <testcase classname="CalculatorTest" name="testMultiply" time="0.003" />
+    <testcase classname="CalculatorTest" name="testDivide" time="0.004" />
+</testsuite>
