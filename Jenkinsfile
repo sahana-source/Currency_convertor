@@ -47,7 +47,7 @@ pipeline {
     post {
         always {
             echo "Publishing test results"
-            junit 'test-result/*.xml'
+            junit 'test-result/junit.xml'
         }
     }
 }
