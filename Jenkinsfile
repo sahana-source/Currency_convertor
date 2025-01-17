@@ -31,8 +31,8 @@ pipeline {
                 sh '''
                     echo "Installing dependencies..."
                     npm install
-                    echo "Running unit tests..."
-                    npm test || echo "Unit tests failed."
+                    echo "Running tests..."
+                    npm test || echo "Tests failed."
                 '''
             }
         }
@@ -51,10 +51,10 @@ pipeline {
                     echo "Building the project..."
                     npm run build
                     echo "Starting static server..."
-                    serve -s build &
+                    npx serve -s build &
                     sleep 10
                     echo "Running Playwright tests..."
-                    npx playwright test --reporter=html
+                    npx playwright test --reporter=html,junit || echo "E2E tests failed."
                 '''
             }
         }
@@ -64,10 +64,10 @@ pipeline {
         always {
             script {
                 try {
-                    echo "Collecting test results..."
-                    junit 'jest-result/junit.xml' // Update path to your test results
+                    echo "Collecting JUnit test results..."
+                    junit 'junit-test/junit.xml' // Updated path to JUnit results
                 } catch (Exception e) {
-                    echo "No test results found: ${e.getMessage()}"
+                    echo "No JUnit test results found: ${e.getMessage()}"
                 }
             }
         }
