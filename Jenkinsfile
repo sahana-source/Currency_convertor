@@ -41,8 +41,16 @@ pipeline {
 
     post {
         always {
-            echo "Publishing test results"
-            junit 'test-result/junit.xml'  // Ensure this points to the correct file
+            script {
+                try {
+                    junit '**/target/surefire-reports/*.xml' // Adjust path as needed
+                } catch (Exception e) {
+                    echo "No test results found: ${e.getMessage()}"
+                }
+            }
+        }
+        unstable {
+            echo "Build marked as UNSTABLE. Check test results or warnings."
         }
     }
 }
