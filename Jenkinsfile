@@ -51,7 +51,7 @@ pipeline {
                     echo "Installing serve package..."
                     npm install serve
                     echo "Starting static server..."
-                    node_modules/.bin/serve -s build &
+                    /usr/local/share/nvm/versions/node/v20.18.1/lib -s build &
                     sleep 10
                     echo "Running Playwright tests..."
                     npx playwright test 
