@@ -54,7 +54,7 @@ pipeline {
                     serve -s build &
                     sleep 10
                     echo "Running Playwright tests..."
-                    npx playwright test tests/ || echo "E2E tests failed."
+                    npx playwright test --reporter=html
                 '''
             }
         }
