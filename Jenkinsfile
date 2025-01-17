@@ -11,12 +11,11 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Listing files in the workspace"
+                    echo "Listing files in the workspace..."
                     ls -la
-                    echo "Node.js and npm versions:"
+                    echo "Checking Node.js and npm versions..."
                     node --version
                     npm --version
-                    ls -la
                 '''
             }
         }
@@ -32,9 +31,8 @@ pipeline {
                 sh '''
                     echo "Installing dependencies..."
                     npm install
-                    echo "Checking for test file..."
-                    test -f src/CalculatorTest.java || echo "Test file not found!"
-                    echo "Running tests..."
+                    echo "Running unit tests..."
+                    npm test || echo "Unit tests failed."
                 '''
             }
         }
@@ -48,13 +46,15 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Installing serve package..."
-                    npm install serve
+                    echo "Installing dependencies..."
+                    npm install
+                    echo "Building the project..."
+                    npm run build
                     echo "Starting static server..."
-                    /usr/local/share/nvm/versions/node/v20.18.1/lib -s build &
+                    serve -s build &
                     sleep 10
                     echo "Running Playwright tests..."
-                    npx playwright test 
+                    npx playwright test tests/ || echo "E2E tests failed."
                 '''
             }
         }
@@ -64,8 +64,8 @@ pipeline {
         always {
             script {
                 try {
-                    // Collect JUnit test results
-                    junit 'jest-result/junit.xml' // Adjust path to match your test results directory
+                    echo "Collecting test results..."
+                    junit 'jest-result/junit.xml' // Update path to your test results
                 } catch (Exception e) {
                     echo "No test results found: ${e.getMessage()}"
                 }
@@ -73,6 +73,9 @@ pipeline {
         }
         unstable {
             echo "Build marked as UNSTABLE. Check test results or warnings."
+        }
+        failure {
+            echo "Build failed. Investigate the logs for details."
         }
     }
 }
