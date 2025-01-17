@@ -43,7 +43,7 @@ pipeline {
         always {
             script {
                 try {
-                    junit '**/target/surefire-reports/*.xml' // Adjust path as needed
+                    junit 'jest-result/junit.xml' // Adjust path as needed
                 } catch (Exception e) {
                     echo "No test results found: ${e.getMessage()}"
                 }
