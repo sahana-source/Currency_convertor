@@ -42,7 +42,7 @@ pipeline {
     post {
         always {
             echo "Publishing test results"
-            junit 'jest-result/junit.xml'  // Ensure this points to the correct file
+            junit 'test-result/junit.xml'  // Ensure this points to the correct file
         }
     }
 }
