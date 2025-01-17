@@ -32,8 +32,29 @@ pipeline {
                 sh '''
                     echo "Installing dependencies..."
                     npm install
-                    test -f src/CalculatorTest.java
+                    echo "Checking for test file..."
+                    test -f src/CalculatorTest.java || echo "Test file not found!"
                     echo "Running tests..."
+                '''
+            }
+        }
+
+        stage('E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    echo "Installing serve package..."
+                    npm install serve
+                    echo "Starting static server..."
+                    node_modules/.bin/serve -s build &
+                    sleep 10
+                    echo "Running Playwright tests..."
+                    npx playwright test 
                 '''
             }
         }
@@ -43,7 +64,8 @@ pipeline {
         always {
             script {
                 try {
-                    junit 'jest-result/junit.xml' // Adjust path as needed
+                    // Collect JUnit test results
+                    junit 'jest-result/junit.xml' // Adjust path to match your test results directory
                 } catch (Exception e) {
                     echo "No test results found: ${e.getMessage()}"
                 }
