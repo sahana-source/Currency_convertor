@@ -70,6 +70,7 @@ pipeline {
                     echo "No JUnit test results found: ${e.getMessage()}"
                 }
             }
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
         unstable {
             echo "Build marked as UNSTABLE. Check test results or warnings."
@@ -77,5 +78,6 @@ pipeline {
         failure {
             echo "Build failed. Investigate the logs for details."
         }
+            
     }
 }
