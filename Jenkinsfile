@@ -59,26 +59,25 @@ pipeline {
             }
         }
 
-            post {
-                always {
-                    script {
-                        try {
-                            echo "Collecting JUnit test results..."
-                            junit 'junit-test/junit.xml' // Updated path to JUnit results
-                        } catch (Exception e) {
-                            echo "No JUnit test results found: ${e.getMessage()}"
-                        }
+        post {
+            always {
+                script {
+                    try {
+                        echo "Collecting JUnit test results..."
+                        junit 'junit-test/junit.xml' // Updated path to JUnit results
+                    } catch (Exception e) {
+                        echo "No JUnit test results found: ${e.getMessage()}"
                     }
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
                 }
-                unstable {
-                    echo "Build marked as UNSTABLE. Check test results or warnings."
-                }
-                failure {
-                    echo "Build failed. Investigate the logs for details."
-                }
-            
-    }
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            }
+            unstable {
+                echo "Build marked as UNSTABLE. Check test results or warnings."
+            }
+            failure {
+                echo "Build failed. Investigate the logs for details."
+            }
+        }
     stage('Deploy') {
             agent {
                 docker {
